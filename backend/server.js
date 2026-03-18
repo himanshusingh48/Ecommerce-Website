@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -9,10 +8,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the frontend folder
-// The frontend folder is one level up and then into 'frontend'
-const frontendPath = path.join(__dirname, '../frontend');
-app.use(express.static(frontendPath));
+// Root API Route
+app.get('/', (req, res) => {
+    res.send("API is running...");
+});
 
 // Placeholder API Route for Products
 app.get('/api/products', (req, res) => {
@@ -22,10 +21,7 @@ app.get('/api/products', (req, res) => {
     ]);
 });
 
-
-
 // Start the Server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-    console.log('Serving frontend files from:', frontendPath);
 });
