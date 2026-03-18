@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Ecommerce</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="ecommerce.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .checkout-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .details-section,
+        .order-summary {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .details-section {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .order-summary {
+            flex: 1;
+            min-width: 300px;
+            height: fit-content;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #ff523b;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        /* Payment Section */
+        .payment-methods {
+            margin-top: 30px;
+        }
+
+        .payment-option {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .payment-option:hover,
+        .payment-option.active {
+            border-color: #ff523b;
+            background-color: #fff9f8;
+        }
+
+        .payment-option input {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .payment-option i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: #555;
+        }
+
+        /* Credit card fields */
+        .card-details {
+            display: none;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .card-details.show {
+            display: block;
+        }
+
+        /* Summary */
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .btn-pay {
+            width: 100%;
+            background-color: #ff523b;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.3s;
+        }
+
+        .btn-pay:hover {
+            background-color: #e04431;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: #ff523b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="checkout-container">
+        <div style="width: 100%;">
+            <a href="cart.html" class="back-link">&larr; Back to Cart</a>
+        </div>
+
+        <!-- Left Side: Details & Payment -->
+        <div class="details-section">
+            <h2>1. Shipping Details</h2>
+            <form id="checkout-form">
+                <div class="row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" required placeholder="Himanshu">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" required placeholder="Singh">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" required placeholder="himanshusingh@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" required placeholder="delhi 000000">
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" required placeholder="Delhi">
+                    </div>
+                    <div class="form-group">
+                        <label>Postal Code</label>
+                        <input type="text" required placeholder="000000">
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 40px;">2. Payment Method</h2>
+                <div class="payment-methods">
+                    <label class="payment-option" onclick="toggleCardFields(true)">
+                        <input type="radio" name="payment" value="card" checked>
+                        <i class='bx bx-credit-card'></i> Credit / Debit Card
+                    </label>
+
+                    <div class="card-details show" id="card-fields">
+                        <div class="form-group">
+                            <label>Card Number</label>
+                            <input type="text" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="text" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="text" placeholder="XXX" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="payment-option" onclick="toggleCardFields(false)">
+                        <input type="radio" name="payment" value="paypal">
+                        <i class='bx bxl-paypal' style="color: #00457C;"></i> PayPal
+                    </label>
+
+                    <label class="payment-option" onclick="toggleCardFields(false)">
+                        <input type="radio" name="payment" value="cod">
+                        <i class='bx bx-money'></i> Cash on Delivery
+                    </label>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Side: Order Summary -->
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div id="summary-items">
+                <!-- Items will be injected here via JS -->
+            </div>
+
+            <div class="summary-item" style="margin-top: 20px;">
+                <span>Subtotal</span>
+                <span id="subtotal">Rs. 0</span>
+            </div>
+            <div class="summary-item">
+                <span>Shipping</span>
+                <span>Free</span>
+            </div>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <span id="total-price">Rs. 0</span>
+            </div>
+
+            <button class="btn-pay" onclick="processPayment()">Place Order</button>
+        </div>
+    </div>
+
+    <script>
+        // Load Cart Summary
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let summaryContainer = document.getElementById("summary-items");
+        let subtotalEl = document.getElementById("subtotal");
+        let totalEl = document.getElementById("total-price");
+
+        if (cart.length === 0) {
+            summaryContainer.innerHTML = "<p style='color:red;'>Your cart is empty.</p>";
+            document.querySelector('.btn-pay').disabled = true;
+        } else {
+            let total = 0;
+            let html = "";
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                html += `
+                <div class="summary-item" style="border-bottom: 1px dashed #eee; padding-bottom: 10px;">
+                    <span style="flex:1; padding-right:10px;">${item.name} <b>x${item.quantity}</b></span>
+                    <span>Rs. ${item.price * item.quantity}</span>
+                </div>
+            `;
+            });
+            summaryContainer.innerHTML = html;
+            subtotalEl.innerText = `Rs. ${total}`;
+            totalEl.innerText = `Rs. ${total}`;
+        }
+
+        // Toggle Credit Card Fields
+        function toggleCardFields(show) {
+            const cardFields = document.getElementById('card-fields');
+            if (show) {
+                cardFields.classList.add('show');
+            } else {
+                cardFields.classList.remove('show');
+            }
+        }
+
+        // Process Payment
+        function processPayment() {
+            // Basic frontend validation mock
+            const form = document.getElementById('checkout-form');
+            if (!form.checkValidity()) {
+                alert("Please fill in all required shipping details.");
+                return;
+            }
+
+            if (cart.length === 0) return;
+
+            // Mock a processing delay
+            let btn = document.querySelector('.btn-pay');
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert("✅ Payment Successful! Thank you for your order.");
+                localStorage.removeItem("cart");
+                window.location.href = "ecommerce.html";
+            }, 1500);
+        }
+    </script>
+
+</body>
+
+</html>
