@@ -251,11 +251,13 @@
 
                     <label class="payment-option" onclick="toggleCardFields('razorpay')">
                         <input type="radio" name="payment" value="razorpay">
-                        <img src="https://razorpay.com/favicon.png" style="width:20px; margin-right:10px; border-radius: 50%;"> Razorpay
+                        <img src="https://razorpay.com/favicon.png"
+                            style="width:20px; margin-right:10px; border-radius: 50%;"> Razorpay
                     </label>
 
                     <div class="card-details" id="razorpay-fields">
-                        <p style="margin-top: 0; margin-bottom: 15px; color: #555; font-weight: 500;">Select Razorpay Method:</p>
+                        <p style="margin-top: 0; margin-bottom: 15px; color: #555; font-weight: 500;">Select Razorpay
+                            Method:</p>
                         <div class="row" style="gap: 15px;">
                             <label class="payment-option" style="margin-bottom: 0; flex: 1; padding: 10px;">
                                 <input type="radio" name="rzp_method" value="upi" checked>
@@ -332,10 +334,10 @@
         function toggleCardFields(show) {
             const cardFields = document.getElementById('card-fields');
             const razorpayFields = document.getElementById('razorpay-fields');
-            
+
             if (cardFields) cardFields.classList.remove('show');
             if (razorpayFields) razorpayFields.classList.remove('show');
-            
+
             if (show === true || show === 'card') {
                 if (cardFields) cardFields.classList.add('show');
             } else if (show === 'razorpay') {
@@ -373,7 +375,7 @@
 
             try {
                 // Step 1: Create order on backend
-                const orderRes = await fetch('http://localhost:5000/api/payment/create-order', {
+                const orderRes = await fetch('https://ecommerce-website-nkpw.onrender.com/api/payment/create-order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
