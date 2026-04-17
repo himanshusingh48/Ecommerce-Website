@@ -7,6 +7,8 @@
     <title>Checkout - Ecommerce</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="ecommerce.css">
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         body {
             background-color: #f5f5f5;
@@ -322,27 +324,106 @@
             }
         }
 
-        // Process Payment
-        function processPayment() {
-            // Basic frontend validation mock
+        // Process Payment via Razorpay
+        async function processPayment() {
             const form = document.getElementById('checkout-form');
             if (!form.checkValidity()) {
                 alert("Please fill in all required shipping details.");
+                form.reportValidity();
                 return;
             }
 
             if (cart.length === 0) return;
 
-            // Mock a processing delay
             let btn = document.querySelector('.btn-pay');
             btn.innerText = "Processing...";
             btn.disabled = true;
 
-            setTimeout(() => {
-                alert("✅ Payment Successful! Thank you for your order.");
-                localStorage.removeItem("cart");
-                window.location.href = "index.html";
-            }, 1500);
+            // Calculate total in rupees
+            let totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+            try {
+                // Step 1: Create order on backend
+                const orderRes = await fetch('http://localhost:5000/api/payment/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: totalAmount,
+                        currency: 'INR',
+                        receipt: 'receipt_' + Date.now()
+                    })
+                });
+
+                const orderData = await orderRes.json();
+
+                if (!orderData.success) {
+                    throw new Error(orderData.error || 'Failed to create order');
+                }
+
+                // Step 2: Open Razorpay modal
+                const options = {
+                    key: orderData.key,
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: 'My Ecommerce Store',
+                    description: 'Order Payment',
+                    order_id: orderData.orderId,
+
+                    handler: async function (response) {
+                        // Step 3: Verify payment on backend
+                        try {
+                            const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyRes.json();
+
+                            if (verifyData.success) {
+                                alert('✅ Payment Successful! Thank you for your order.\nPayment ID: ' + response.razorpay_payment_id);
+                                localStorage.removeItem('cart');
+                                window.location.href = 'index.html';
+                            } else {
+                                alert('❌ Payment verification failed. Please contact support.');
+                            }
+                        } catch (verifyErr) {
+                            console.error('Verification error:', verifyErr);
+                            alert('⚠️ Could not verify payment. Please contact support.');
+                        }
+                    },
+
+                    prefill: {
+                        name: form.querySelector('input[placeholder="Himanshu"]')?.value + ' ' + form.querySelector('input[placeholder="Singh"]')?.value,
+                        email: form.querySelector('input[type="email"]')?.value,
+                        contact: ''
+                    },
+
+                    theme: {
+                        color: '#ff523b'
+                    },
+
+                    modal: {
+                        ondismiss: function () {
+                            btn.innerText = 'Place Order';
+                            btn.disabled = false;
+                        }
+                    }
+                };
+
+                const rzp = new window.Razorpay(options);
+                rzp.open();
+
+            } catch (err) {
+                console.error('Payment error:', err);
+                alert('❌ Error: ' + err.message + '\n\nMake sure your backend server is running on port 5000.');
+                btn.innerText = 'Place Order';
+                btn.disabled = false;
+            }
         }
     </script>
 
