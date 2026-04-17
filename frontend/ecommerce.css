@@ -695,16 +695,16 @@
 
     /* Buy Now - Primary */
     .best-seller .buy-now button {
-        background-color: #222;
+        background-color: #3388ff;
         color: #fff;
-        border: 2px solid #222;
+        border: 2px solid #3388ff;
     }
 
     .best-seller .buy-now button:hover {
-        background-color: #ff523b;
-        border-color: #ff523b;
+        background-color: #1e70e5;
+        border-color: #1e70e5;
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 82, 59, 0.3);
+        box-shadow: 0 5px 15px rgba(51, 136, 255, 0.4);
     }
 
     .best-seller .buy-now button a {
