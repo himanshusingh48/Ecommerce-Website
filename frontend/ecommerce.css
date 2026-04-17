@@ -577,7 +577,7 @@
     .best-seller {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: stretch;
         flex-wrap: wrap;
         gap: 30px;
     }
@@ -641,6 +641,8 @@
         /* Soft shadow */
         transition: var(--transition);
         /* Smooth transition */
+        display: flex;
+        flex-direction: column;
     }
 
     .seller .best-p1:hover {
@@ -658,6 +660,13 @@
     .seller .best-p1-txt {
         padding: 0 15px;
         /* Add internal padding inside cards */
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+    
+    .seller .best-p1-txt .buy-now {
+        margin-top: auto;
     }
 
     .seller .best-p1 .price {
