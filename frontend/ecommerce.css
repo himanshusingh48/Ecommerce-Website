@@ -1377,3 +1377,40 @@
             margin-bottom: 0px;
         }
     }
+
+    /* Navigation Buttons */
+    .nav-btn {
+        padding: 6px 15px !important;
+        border-radius: 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-left: 10px;
+        display: inline-block;
+    }
+    
+    .nav-signin {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color) !important;
+        background: transparent;
+    }
+    
+    .nav-signin:hover {
+        background: var(--primary-color);
+        color: var(--white) !important;
+    }
+
+    .nav-signup {
+        background: var(--primary-color);
+        color: var(--white) !important;
+        border: 2px solid var(--primary-color);
+    }
+
+    .nav-signup:hover {
+        background: transparent;
+        color: var(--primary-color) !important;
+    }
+    
+    .navbar-container ul a.nav-btn:after {
+        display: none !important;
+    }
+    
